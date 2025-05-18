@@ -8,15 +8,10 @@ phases:
       - echo Instalando dependencias...
       - pip install -r blacklist_service/requirements.txt
       - pip install pytest faker
-      - chmod +x scripts/start.sh
-      - chmod +x scripts/stop.sh
-
-      # 🔐 Autenticación con Docker Hub
       - echo Autenticando en Docker Hub...
       - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .username)
       - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .password)
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      
 
   pre_build:
     commands:
@@ -32,13 +27,20 @@ phases:
 
   post_build:
     commands:
-      - echo Fase post_build finalizada ok.
+      - echo Fase post_build finalizada.
       - echo Iniciando login en Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 416825837619.dkr.ecr.us-east-1.amazonaws.com
-      - docker tag mi-microservicio:latest 416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service:latest
-      - docker push 416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service:latest
-
+      - export REPOSITORY_URI=416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service
+      - export IMAGE_TAG=latest
+      - docker tag mi-microservicio:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      #- echo "[{\"name\":\"blacklist\",\"imageUri\":\"$REPOSITORY_URI:$IMAGE_TAG\"}]" > imagedefinitions.json
+      - printf '[{"name":"blacklist","imageUri":"416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service:latest"}]' > imagedefinitions.json
+      - printf '{"ImageURI":"416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service:latest"}' > imageDetail.json
 
 artifacts:
   files:
-    - '**/*'
+    - appspec.json
+    - taskdef.json
+    - imagedefinitions.json
+    - imageDetail.json      
