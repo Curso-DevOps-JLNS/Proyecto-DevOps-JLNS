@@ -8,10 +8,10 @@ phases:
       - echo Instalando dependencias...
       - pip install -r blacklist_service/requirements.txt
       - pip install pytest faker
-      - echo Autenticando en Docker Hub...
-      - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .username)
-      - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .password)
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      # - echo Autenticando en Docker Hub...
+      # - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .username)
+      # - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .password)
+      # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   pre_build:
     commands:
