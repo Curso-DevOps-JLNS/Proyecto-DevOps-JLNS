@@ -7,7 +7,7 @@
         "Properties": {
           "TaskDefinition": "<TASK_DEFINITION>",
           "LoadBalancerInfo": {
-            "ContainerName": "blacklist",
+            "ContainerName": "microservicio",
             "ContainerPort": 5000
           }
         }
