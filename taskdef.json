@@ -1,24 +1,23 @@
 {
-  "executionRoleArn": "arn:aws:iam::646322278084:role/ecsTaskExecutionRole",
-  "containerDefinitions": [
-    {
-      "portMappings": [
-        {
-          "hostPort": 5000,
-          "protocol": "tcp",
-          "containerPort": 5000
-        }
-      ],
-      "image": "<IMAGE>", 
-      "essential": true,
-      "name": "blacklist"
-    }
-  ],
-  "requiresCompatibilities": [
-    "FARGATE"
-  ],
-  "networkMode": "awsvpc",
-  "cpu": "512",
-  "memory": "1024",
-  "family": "blacklist-task"
-} 
+    "family": "microservicio-task",
+    "networkMode": "awsvpc",
+    "executionRoleArn": "arn:aws:iam::646322278084:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "name": "microservicio",
+        "image": "<IMAGE>",
+        "portMappings": [
+          {
+            "containerPort": 5000,
+            "hostPort": 5000,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true
+      }
+    ],
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "512",
+    "memory": "1024"
+}
+  
