@@ -1,23 +1,51 @@
 {
-    "family": "microservicio-task",
-    "networkMode": "awsvpc",
-    "executionRoleArn": "arn:aws:iam::646322278084:role/ecsTaskExecutionRole",
-    "containerDefinitions": [
-      {
-        "name": "microservicio",
-        "image": "<IMAGE1_NAME>",
-        "portMappings": [
-          {
-            "containerPort": 5000,
-            "hostPort": 5000,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true
-      }
-    ],
-    "requiresCompatibilities": ["FARGATE"],
-    "cpu": "512",
-    "memory": "1024"
+  "executionRoleArn": "arn:aws:iam::416825837619:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "portMappings": [
+        {
+          "hostPort": 5000,
+          "protocol": "tcp",
+          "containerPort": 5000
+        }
+      ],
+      "environment": [
+        {
+          "name": "NEW_RELIC_LICENSE_KEY",
+          "value": "c112a8cec5e922c6ec55a4d662b5f406FFFFNRAL"
+        },
+        {
+          "name": "NEW_RELIC_APP_NAME",
+          "value": "MiAppFargate"
+        },
+        {
+          "name": "NEW_RELIC_LOG",
+          "value": "stdout"
+        },
+        {
+          "name": "NEW_RELIC_CONFIG_FILE",
+          "value": "/app/newrelic.ini"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/blacklist-service",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group": "true"
+        }
+      },
+      "image": "<IMAGE>",
+      "essential": true,
+      "name": "blacklist"
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "512",
+  "memory": "1024",
+  "family": "blacklist-task"
 }
-  

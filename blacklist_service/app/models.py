@@ -1,5 +1,5 @@
 from datetime import datetime
-from .extensions import db
+from .extensions import db  # ✅ Importa solo db
 
 class BlacklistEntry(db.Model):
     __tablename__ = 'blacklist'

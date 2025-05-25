@@ -1,29 +1,24 @@
+version: '3.8'
+
 services:
   blacklist_service:
-    build: .
+    build: ./blacklist_service
     ports:
-      - "80:5000"
+      - "5000:5000"
+    volumes:
+      - ./blacklist_service/newrelic.ini:/app/newrelic.ini
     environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
-    # environment:
-    #   - DATABASE_URL=postgresql://user:password@db:5432/blacklist_db
-    #   - JWT_SECRET_KEY=supersecret
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-
+      - DATABASE_URL=postgresql://user:password@db:5432/blacklist_db
+      - JWT_SECRET_KEY=supersecret
+      - NEW_RELIC_CONFIG_FILE=/app/newrelic.ini
+    depends_on:
+      - db
     
-  # db:
-  #   image: postgres:13
-  #   environment:
-  #     POSTGRES_DB: blacklist_db
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #   ports:
-  #     - "5433:5432"
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "user"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: blacklist_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"

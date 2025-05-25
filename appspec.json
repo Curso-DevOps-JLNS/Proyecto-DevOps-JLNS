@@ -1,18 +1,17 @@
 {
-    "version": 1,
-    "Resources": [
-      {
-        "TargetService": {
-          "Type": "AWS::ECS::Service",
-          "Properties": {
-            "TaskDefinition": "<TASK_DEFINITION>",
-            "LoadBalancerInfo": {
-              "ContainerName": "microservicio",
-              "ContainerPort": 5000
-            }
+  "version": 1,
+  "Resources": [
+    {
+      "TargetService": {
+        "Type": "AWS::ECS::Service",
+        "Properties": {
+          "TaskDefinition": "<TASK_DEFINITION>",
+          "LoadBalancerInfo": {
+            "ContainerName": "blacklist",
+            "ContainerPort": 5000
           }
         }
       }
-    ]
+    }
+  ]
 }
-  

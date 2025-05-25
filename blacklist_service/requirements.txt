@@ -1,0 +1,12 @@
+Flask==1.1.4
+Flask-RESTful
+Flask-SQLAlchemy==2.5.1
+Flask-Marshmallow
+Flask-JWT-Extended
+psycopg2-binary
+marshmallow-sqlalchemy
+markupsafe==2.0.1
+SQLAlchemy==1.4.46
+pytest
+Faker
+newrelic

@@ -1,34 +1,46 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo Instalando dependencias...
+      - pip install -r blacklist_service/requirements.txt
+      - pip install pytest faker
+      - echo Autenticando en Docker Hub...
+      - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .username)
+      - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id dockerhub/credentials --query SecretString --output text | jq -r .password)
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 646322278084.dkr.ecr.us-east-2.amazonaws.com
+      - echo Ejecutando pruebas unitarias...
+      - export PYTHONPATH=$PYTHONPATH:$(pwd)/blacklist_service
+      - pytest blacklist_service/tests/
 
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t mi-microservicio .
-      - docker tag mi-microservicio:latest 646322278084.dkr.ecr.us-east-2.amazonaws.com/mi-microservicio:latest
+      - echo Construcción completada exitosamente.
+      - echo Construyendo imagen Docker...
+      - docker build -t mi-microservicio -f blacklist_service/Dockerfile blacklist_service
 
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker image...
-      - docker push 646322278084.dkr.ecr.us-east-2.amazonaws.com/mi-microservicio:latest
-      - echo Writing image definitions file...
-      - printf '[{"name":"microservicio","imageUri":"646322278084.dkr.ecr.us-east-2.amazonaws.com/mi-microservicio:latest"}]' > imagedefinitions.json
-      - echo Writing appspec \& taskdef
-      - cat appspec.json
-      - cat taskdef.json
-      - echo Writing imagedefinitions.json
-      - cat imagedefinitions.json
+      - echo Fase post_build finalizada.
+      - echo Iniciando login en Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 416825837619.dkr.ecr.us-east-1.amazonaws.com
+      - export REPOSITORY_URI=416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service
+      - export IMAGE_TAG=latest
+      - docker tag mi-microservicio:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      #- echo "[{\"name\":\"blacklist\",\"imageUri\":\"$REPOSITORY_URI:$IMAGE_TAG\"}]" > imagedefinitions.json
+      - printf '[{"name":"blacklist","imageUri":"416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service:latest"}]' > imagedefinitions.json
+      - printf '{"ImageURI":"416825837619.dkr.ecr.us-east-1.amazonaws.com/blacklist-service:latest"}' > imageDetail.json
 
 artifacts:
   files:
     - appspec.json
     - taskdef.json
     - imagedefinitions.json
-  discard-paths: no
+    - imageDetail.json      

@@ -4,7 +4,8 @@ from app.models import BlacklistEntry
 from app.schemas import BlacklistSchema
 from app.routes import STATIC_TOKEN
 from faker import Faker
-from application import create_app
+from run import create_app
+
 
 fake = Faker()
 

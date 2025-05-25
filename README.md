@@ -1,6 +1,6 @@
 # Blacklist Microservice Project
 
-Este repositorio forma parte de una arquitectura basada en microservicios. Actualmente contiene el microservicio de listas negras (`blacklist_service`) y la configuración general del entorno de desarrollo y despliegue. Está diseñado desde el inicio para ser escalable y facilitar la incorporación de nuevos microservicios en el futuro.
+Este repositorio forma parte de una arquitectura basada en microservicios. Actualmente contiene el microservicio de listas negras (`blacklist_service`) y la configuración general del entorno de desarrollo y despliegue. Está diseñado desde el inicio para ser escalable y facilitar la incorporación de nuevos microservicios en el futuro. 
 
 ---
 
@@ -31,7 +31,7 @@ Este repositorio forma parte de una arquitectura basada en microservicios. Actua
 
 ## 🚀 Objetivo del Microservicio
 
-El microservicio permite gestionar una lista negra global de correos electrónicos. Provee dos endpoints principales:
+El microservicio `blacklist_service` permite gestionar una lista negra global de emails. Provee dos endpoints principales:
 
 - `POST /blacklists`: Agrega un email a la lista negra.
 - `GET /blacklists/<email>`: Consulta si un email está en la lista negra.
