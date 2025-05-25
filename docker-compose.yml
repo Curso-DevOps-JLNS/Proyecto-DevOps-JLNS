@@ -5,9 +5,12 @@ services:
     build: ./blacklist_service
     ports:
       - "5000:5000"
+    volumes:
+      - ./blacklist_service/newrelic.ini:/app/newrelic.ini
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/blacklist_db
       - JWT_SECRET_KEY=supersecret
+      - NEW_RELIC_CONFIG_FILE=/app/newrelic.ini
     depends_on:
       - db
     

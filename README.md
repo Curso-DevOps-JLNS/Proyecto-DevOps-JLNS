@@ -8,7 +8,7 @@ Este repositorio forma parte de una arquitectura basada en microservicios. Actua
 
 ```
 .
-├── blacklist_service/        # Microservicio para gestionar listas negras de emails 
+├── blacklist_service/        # Microservicio para gestionar listas negras de emails
 │   ├── app/                  # Código fuente del microservicio
 │   │   ├── __init__.py       # Inicialización de la app Flask y configuración de extensiones
 │   │   ├── models.py         # Modelos de base de datos con SQLAlchemy

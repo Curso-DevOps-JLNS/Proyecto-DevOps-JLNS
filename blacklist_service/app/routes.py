@@ -3,6 +3,7 @@ from flask_restful import Resource
 from functools import wraps
 from .models import BlacklistEntry, db
 from .schemas import BlacklistSchema
+import newrelic.agent
 
 schema = BlacklistSchema()
 
@@ -18,6 +19,7 @@ def token_required(f):
     return decorated
 
 class BlacklistResource(Resource):
+    @newrelic.agent.function_trace(name='Custom/Blacklist/Add')
     @token_required
     def post(self):
         data = request.get_json()
@@ -36,6 +38,7 @@ class BlacklistResource(Resource):
         return {"message": "Email added to blacklist"}, 201
 
 class BlacklistCheckResource(Resource):
+    @newrelic.agent.function_trace(name='Custom/Blacklist/Query')
     @token_required
     def get(self, email):
         entry = BlacklistEntry.query.filter_by(email=email).first()
@@ -44,6 +47,7 @@ class BlacklistCheckResource(Resource):
         return {"blacklisted": False}, 200
     
 class HealthCheckResource(Resource):
+    @newrelic.agent.function_trace(name='Custom/HealthCheck')
     def get(self):
         return {"status": "ok"}, 200
 
